@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ZuoyeTijiaoDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.zuoye_tijiao_uuid_number as zuoyeTijiaoUuidNumber
+        ,a.zuoye_id as zuoyeId
+        ,a.gongzuo_id as gongzuoId
+        ,a.yonghu_id as yonghuId
+        ,a.zuoye_tijiao_text as zuoyeTijiaoText
+        ,a.zuoye_shangchuan_file as zuoyeShangchuanFile
+        ,a.zuoye_tijiao_yesno_types as zuoyeTijiaoYesnoTypes
+        ,a.zuoye_tijiao_pigai as zuoyeTijiaoPigai
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ZuoyeTijiaoView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+        ,gongzuo.gongzuo_name as gongzuoName
+        ,gongzuo.gongzuo_phone as gongzuoPhone
+        ,gongzuo.gongzuo_id_number as gongzuoIdNumber
+        ,gongzuo.gongzuo_photo as gongzuoPhoto
+        ,gongzuo.shenqing_yuyue_types as shenqingYuyueTypes
+        ,gongzuo.gongzuo_email as gongzuoEmail
+        ,yonghu.yonghu_name as yonghuName
+        ,yonghu.yonghu_phone as yonghuPhone
+        ,yonghu.yonghu_id_number as yonghuIdNumber
+        ,yonghu.yonghu_photo as yonghuPhoto
+        ,yonghu.shenqing_yuyue_types as shenqingYuyueTypes
+        ,yonghu.yonghu_email as yonghuEmail
+        ,zuoye.zuoye_name as zuoyeName
+        ,zuoye.zuoye_uuid_number as zuoyeUuidNumber
+        ,zuoye.zuoye_photo as zuoyePhoto
+        ,zuoye.zuoye_types as zuoyeTypes
+        ,zuoye.zuoye_file as zuoyeFile
+        ,zuoye.zuoye_content as zuoyeContent
+        ,zuoye.zuoye_delete as zuoyeDelete
+
+        FROM zuoye_tijiao  a
+        left JOIN gongzuo gongzuo ON a.gongzuo_id = gongzuo.id
+        left JOIN yonghu yonghu ON a.yonghu_id = yonghu.id
+        left JOIN zuoye zuoye ON a.zuoye_id = zuoye.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.zuoyeTijiaoUuidNumber != '' and params.zuoyeTijiaoUuidNumber != null and params.zuoyeTijiaoUuidNumber != 'null' ">
+                and a.zuoye_tijiao_uuid_number like CONCAT('%',#{params.zuoyeTijiaoUuidNumber},'%')
+            </if>
+            <if test="params.zuoyeId != null and params.zuoyeId != ''">
+                and (
+                    a.zuoye_id = #{params.zuoyeId}
+                )
+            </if>
+            <if test="params.gongzuoId != null and params.gongzuoId != ''">
+                and (
+                    a.gongzuo_id = #{params.gongzuoId}
+                )
+            </if>
+            <if test="params.yonghuId != null and params.yonghuId != ''">
+                and (
+                    a.yonghu_id = #{params.yonghuId}
+                )
+            </if>
+            <if test=" params.zuoyeTijiaoText != '' and params.zuoyeTijiaoText != null and params.zuoyeTijiaoText != 'null' ">
+                and a.zuoye_tijiao_text like CONCAT('%',#{params.zuoyeTijiaoText},'%')
+            </if>
+            <if test="params.zuoyeTijiaoYesnoTypes != null and params.zuoyeTijiaoYesnoTypes != ''">
+                and a.zuoye_tijiao_yesno_types = #{params.zuoyeTijiaoYesnoTypes}
+            </if>
+            <if test="params.zuoyeTijiaoPigaiStart != null and params.zuoyeTijiaoPigaiStart != ''">
+                <![CDATA[  and a.zuoye_tijiao_pigai >= #{params.zuoyeTijiaoPigaiStart}   ]]>
+            </if>
+            <if test="params.zuoyeTijiaoPigaiEnd != null and params.zuoyeTijiaoPigaiEnd != ''">
+                <![CDATA[  and a.zuoye_tijiao_pigai <= #{params.zuoyeTijiaoPigaiEnd}   ]]>
+            </if>
+             <if test="params.zuoyeTijiaoPigai != null and params.zuoyeTijiaoPigai != ''">
+                and a.zuoye_tijiao_pigai = #{params.zuoyeTijiaoPigai}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+
+                <!-- 判断党务工作者的id不为空 -->
+            <if test=" params.gongzuoIdNotNull != '' and params.gongzuoIdNotNull != null and params.gongzuoIdNotNull != 'null' ">
+                and a.gongzuo_id IS NOT NULL
+            </if>
+            <if test=" params.gongzuoName != '' and params.gongzuoName != null and params.gongzuoName != 'null' ">
+                and gongzuo.gongzuo_name like CONCAT('%',#{params.gongzuoName},'%')
+            </if>
+            <if test=" params.gongzuoPhone != '' and params.gongzuoPhone != null and params.gongzuoPhone != 'null' ">
+                and gongzuo.gongzuo_phone like CONCAT('%',#{params.gongzuoPhone},'%')
+            </if>
+            <if test=" params.gongzuoIdNumber != '' and params.gongzuoIdNumber != null and params.gongzuoIdNumber != 'null' ">
+                and gongzuo.gongzuo_id_number like CONCAT('%',#{params.gongzuoIdNumber},'%')
+            </if>
+            <if test="params.shenqingYuyueTypes != null  and params.shenqingYuyueTypes != ''">
+                and gongzuo.shenqing_yuyue_types = #{params.shenqingYuyueTypes}
+            </if>
+
+            <if test=" params.gongzuoEmail != '' and params.gongzuoEmail != null and params.gongzuoEmail != 'null' ">
+                and gongzuo.gongzuo_email like CONCAT('%',#{params.gongzuoEmail},'%')
+            </if>
+                <!-- 判断用户的id不为空 -->
+            <if test=" params.yonghuIdNotNull != '' and params.yonghuIdNotNull != null and params.yonghuIdNotNull != 'null' ">
+                and a.yonghu_id IS NOT NULL
+            </if>
+            <if test=" params.yonghuName != '' and params.yonghuName != null and params.yonghuName != 'null' ">
+                and yonghu.yonghu_name like CONCAT('%',#{params.yonghuName},'%')
+            </if>
+            <if test=" params.yonghuPhone != '' and params.yonghuPhone != null and params.yonghuPhone != 'null' ">
+                and yonghu.yonghu_phone like CONCAT('%',#{params.yonghuPhone},'%')
+            </if>
+            <if test=" params.yonghuIdNumber != '' and params.yonghuIdNumber != null and params.yonghuIdNumber != 'null' ">
+                and yonghu.yonghu_id_number like CONCAT('%',#{params.yonghuIdNumber},'%')
+            </if>
+            <if test="params.shenqingYuyueTypes != null  and params.shenqingYuyueTypes != ''">
+                and yonghu.shenqing_yuyue_types = #{params.shenqingYuyueTypes}
+            </if>
+
+            <if test=" params.yonghuEmail != '' and params.yonghuEmail != null and params.yonghuEmail != 'null' ">
+                and yonghu.yonghu_email like CONCAT('%',#{params.yonghuEmail},'%')
+            </if>
+                <!-- 判断作业的id不为空 -->
+            <if test=" params.zuoyeIdNotNull != '' and params.zuoyeIdNotNull != null and params.zuoyeIdNotNull != 'null' ">
+                and a.zuoye_id IS NOT NULL
+            </if>
+            <if test="params.dangkeId != null  and params.dangkeId != ''">
+                and zuoye.dangke_id = #{params.dangkeId}
+            </if>
+            <if test=" params.zuoyeName != '' and params.zuoyeName != null and params.zuoyeName != 'null' ">
+                and zuoye.zuoye_name like CONCAT('%',#{params.zuoyeName},'%')
+            </if>
+            <if test=" params.zuoyeUuidNumber != '' and params.zuoyeUuidNumber != null and params.zuoyeUuidNumber != 'null' ">
+                and zuoye.zuoye_uuid_number like CONCAT('%',#{params.zuoyeUuidNumber},'%')
+            </if>
+            <if test="params.zuoyeTypes != null  and params.zuoyeTypes != ''">
+                and zuoye.zuoye_types = #{params.zuoyeTypes}
+            </if>
+
+            <if test=" params.zuoyeContent != '' and params.zuoyeContent != null and params.zuoyeContent != 'null' ">
+                and zuoye.zuoye_content like CONCAT('%',#{params.zuoyeContent},'%')
+            </if>
+            <if test="params.zuoyeDeleteStart != null  and params.zuoyeDeleteStart != '' ">
+                <![CDATA[  and zuoye.zuoye_delete >= #{params.zuoyeDeleteStart}   ]]>
+            </if>
+            <if test="params.zuoyeDeleteEnd != null  and params.zuoyeDeleteEnd != '' ">
+                <![CDATA[  and zuoye.zuoye_delete <= #{params.zuoyeDeleteEnd}   ]]>
+            </if>
+            <if test="params.zuoyeDelete != null  and params.zuoyeDelete != '' ">
+                and zuoye.zuoye_delete = #{params.zuoyeDelete}
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(zuoye.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(zuoye.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>

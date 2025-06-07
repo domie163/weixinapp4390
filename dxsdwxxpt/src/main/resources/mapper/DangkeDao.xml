@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DangkeDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.dangke_name as dangkeName
+        ,a.dangke_uuid_number as dangkeUuidNumber
+        ,a.dangke_photo as dangkePhoto
+        ,a.dangke_address as dangkeAddress
+        ,a.zan_number as zanNumber
+        ,a.cai_number as caiNumber
+        ,a.dangke_types as dangkeTypes
+        ,a.dangke_kucun_number as dangkeKucunNumber
+        ,a.dangke_content as dangkeContent
+        ,a.dangke_delete as dangkeDelete
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.DangkeView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+
+        FROM dangke  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.dangkeName != '' and params.dangkeName != null and params.dangkeName != 'null' ">
+                and a.dangke_name like CONCAT('%',#{params.dangkeName},'%')
+            </if>
+            <if test=" params.dangkeUuidNumber != '' and params.dangkeUuidNumber != null and params.dangkeUuidNumber != 'null' ">
+                and a.dangke_uuid_number like CONCAT('%',#{params.dangkeUuidNumber},'%')
+            </if>
+            <if test=" params.dangkeAddress != '' and params.dangkeAddress != null and params.dangkeAddress != 'null' ">
+                and a.dangke_address like CONCAT('%',#{params.dangkeAddress},'%')
+            </if>
+            <if test="params.zanNumberStart != null and params.zanNumberStart != ''">
+                <![CDATA[  and a.zan_number >= #{params.zanNumberStart}   ]]>
+            </if>
+            <if test="params.zanNumberEnd != null and params.zanNumberEnd != ''">
+                <![CDATA[  and a.zan_number <= #{params.zanNumberEnd}   ]]>
+            </if>
+             <if test="params.zanNumber != null and params.zanNumber != ''">
+                and a.zan_number = #{params.zanNumber}
+             </if>
+            <if test="params.caiNumberStart != null and params.caiNumberStart != ''">
+                <![CDATA[  and a.cai_number >= #{params.caiNumberStart}   ]]>
+            </if>
+            <if test="params.caiNumberEnd != null and params.caiNumberEnd != ''">
+                <![CDATA[  and a.cai_number <= #{params.caiNumberEnd}   ]]>
+            </if>
+             <if test="params.caiNumber != null and params.caiNumber != ''">
+                and a.cai_number = #{params.caiNumber}
+             </if>
+            <if test="params.dangkeTypes != null and params.dangkeTypes != ''">
+                and a.dangke_types = #{params.dangkeTypes}
+            </if>
+            <if test="params.dangkeKucunNumberStart != null and params.dangkeKucunNumberStart != ''">
+                <![CDATA[  and a.dangke_kucun_number >= #{params.dangkeKucunNumberStart}   ]]>
+            </if>
+            <if test="params.dangkeKucunNumberEnd != null and params.dangkeKucunNumberEnd != ''">
+                <![CDATA[  and a.dangke_kucun_number <= #{params.dangkeKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.dangkeKucunNumber != null and params.dangkeKucunNumber != ''">
+                and a.dangke_kucun_number = #{params.dangkeKucunNumber}
+             </if>
+            <if test=" params.dangkeContent != '' and params.dangkeContent != null and params.dangkeContent != 'null' ">
+                and a.dangke_content like CONCAT('%',#{params.dangkeContent},'%')
+            </if>
+            <if test="params.dangkeDeleteStart != null and params.dangkeDeleteStart != ''">
+                <![CDATA[  and a.dangke_delete >= #{params.dangkeDeleteStart}   ]]>
+            </if>
+            <if test="params.dangkeDeleteEnd != null and params.dangkeDeleteEnd != ''">
+                <![CDATA[  and a.dangke_delete <= #{params.dangkeDeleteEnd}   ]]>
+            </if>
+             <if test="params.dangkeDelete != null and params.dangkeDelete != ''">
+                and a.dangke_delete = #{params.dangkeDelete}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>

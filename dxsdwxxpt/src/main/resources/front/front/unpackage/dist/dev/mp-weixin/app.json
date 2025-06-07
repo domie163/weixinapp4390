@@ -1,0 +1,141 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/register/register",
+    "pages/forget/forget",
+    "pages/changepassword/changepassword",
+    "pages/center/center",
+    "pages/user-info/userinfo",
+    "pages/dangan/list",
+    "pages/dangan/list2",
+    "pages/dangan/add-or-update",
+    "pages/dangan/detail",
+    "pages/dangke/list",
+    "pages/dangke/list2",
+    "pages/dangke/add-or-update",
+    "pages/dangke/detail",
+    "pages/dangkeCollection/list",
+    "pages/dangkeCollection/list2",
+    "pages/dangkeCollection/add-or-update",
+    "pages/dangkeCollection/detail",
+    "pages/dangkeCommentback/list",
+    "pages/dangkeCommentback/list2",
+    "pages/dangkeCommentback/add-or-update",
+    "pages/dangkeCommentback/detail",
+    "pages/dangkeOrder/list",
+    "pages/dangkeOrder/confirm",
+    "pages/exampapertopic/list",
+    "pages/exampapertopic/list2",
+    "pages/exampapertopic/add-or-update",
+    "pages/exampapertopic/detail",
+    "pages/gonggao/list",
+    "pages/gonggao/list2",
+    "pages/gonggao/add-or-update",
+    "pages/gonggao/detail",
+    "pages/gongzuo/list",
+    "pages/gongzuo/list2",
+    "pages/gongzuo/add-or-update",
+    "pages/gongzuo/detail",
+    "pages/kaoqin/list",
+    "pages/kaoqin/list2",
+    "pages/kaoqin/add-or-update",
+    "pages/kaoqin/detail",
+    "pages/liuyan/list",
+    "pages/liuyan/list2",
+    "pages/liuyan/add-or-update",
+    "pages/liuyan/detail",
+    "pages/shenqingYuyue/list",
+    "pages/shenqingYuyue/list2",
+    "pages/shenqingYuyue/add-or-update",
+    "pages/shenqingYuyue/detail",
+    "pages/tixing/list",
+    "pages/tixing/list2",
+    "pages/tixing/add-or-update",
+    "pages/tixing/detail",
+    "pages/xuexi/list",
+    "pages/xuexi/list2",
+    "pages/xuexi/add-or-update",
+    "pages/xuexi/detail",
+    "pages/xuexiCollection/list",
+    "pages/xuexiCollection/list2",
+    "pages/xuexiCollection/add-or-update",
+    "pages/xuexiCollection/detail",
+    "pages/xuexiLiuyan/list",
+    "pages/xuexiLiuyan/list2",
+    "pages/xuexiLiuyan/add-or-update",
+    "pages/xuexiLiuyan/detail",
+    "pages/yonghu/list",
+    "pages/yonghu/list2",
+    "pages/yonghu/add-or-update",
+    "pages/yonghu/detail",
+    "pages/zuoye/list",
+    "pages/zuoye/list2",
+    "pages/zuoye/add-or-update",
+    "pages/zuoye/detail",
+    "pages/zuoyeTijiao/list",
+    "pages/zuoyeTijiao/list2",
+    "pages/zuoyeTijiao/add-or-update",
+    "pages/zuoyeTijiao/detail",
+    "pages/exampaper/list",
+    "pages/exampaper/exam",
+    "pages/examrecord/list",
+    "pages/examrecord/detail",
+    "pages/examrewrongquestion/list",
+    "pages/index/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "大学生党务学习平台",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#FFFFFF",
+    "selectedColor": "#fff",
+    "borderStyle": "black",
+    "backgroundColor": "#29bdd9",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabs/index.png",
+        "selectedIconPath": "static/tabs/index1.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/dangke/list",
+        "iconPath": "static/tabs/type.png",
+        "selectedIconPath": "static/tabs/type1.png",
+        "text": "党课"
+      },
+      {
+        "pagePath": "pages/exampaper/list",
+        "iconPath": "static/tabs/type.png",
+        "selectedIconPath": "static/tabs/type1.png",
+        "text": "试卷"
+      },
+      {
+        "pagePath": "pages/gonggao/list",
+        "iconPath": "static/tabs/type.png",
+        "selectedIconPath": "static/tabs/type1.png",
+        "text": "公告信息"
+      },
+      {
+        "pagePath": "pages/center/center",
+        "iconPath": "static/tabs/mine.png",
+        "selectedIconPath": "static/tabs/mine1.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "小程序将使用定位功能"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "usingComponents": {}
+}

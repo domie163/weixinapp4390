@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.XuexiDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.xuexi_name as xuexiName
+        ,a.xuexi_uuid_number as xuexiUuidNumber
+        ,a.xuexi_photo as xuexiPhoto
+        ,a.zan_number as zanNumber
+        ,a.cai_number as caiNumber
+        ,a.xuexi_file as xuexiFile
+        ,a.xuexi_video as xuexiVideo
+        ,a.xuexi_types as xuexiTypes
+        ,a.xuexi_content as xuexiContent
+        ,a.xuexi_delete as xuexiDelete
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.XuexiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+
+        FROM xuexi  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.xuexiName != '' and params.xuexiName != null and params.xuexiName != 'null' ">
+                and a.xuexi_name like CONCAT('%',#{params.xuexiName},'%')
+            </if>
+            <if test=" params.xuexiUuidNumber != '' and params.xuexiUuidNumber != null and params.xuexiUuidNumber != 'null' ">
+                and a.xuexi_uuid_number like CONCAT('%',#{params.xuexiUuidNumber},'%')
+            </if>
+            <if test="params.zanNumberStart != null and params.zanNumberStart != ''">
+                <![CDATA[  and a.zan_number >= #{params.zanNumberStart}   ]]>
+            </if>
+            <if test="params.zanNumberEnd != null and params.zanNumberEnd != ''">
+                <![CDATA[  and a.zan_number <= #{params.zanNumberEnd}   ]]>
+            </if>
+             <if test="params.zanNumber != null and params.zanNumber != ''">
+                and a.zan_number = #{params.zanNumber}
+             </if>
+            <if test="params.caiNumberStart != null and params.caiNumberStart != ''">
+                <![CDATA[  and a.cai_number >= #{params.caiNumberStart}   ]]>
+            </if>
+            <if test="params.caiNumberEnd != null and params.caiNumberEnd != ''">
+                <![CDATA[  and a.cai_number <= #{params.caiNumberEnd}   ]]>
+            </if>
+             <if test="params.caiNumber != null and params.caiNumber != ''">
+                and a.cai_number = #{params.caiNumber}
+             </if>
+            <if test=" params.xuexiVideo != '' and params.xuexiVideo != null and params.xuexiVideo != 'null' ">
+                and a.xuexi_video like CONCAT('%',#{params.xuexiVideo},'%')
+            </if>
+            <if test="params.xuexiTypes != null and params.xuexiTypes != ''">
+                and a.xuexi_types = #{params.xuexiTypes}
+            </if>
+            <if test=" params.xuexiContent != '' and params.xuexiContent != null and params.xuexiContent != 'null' ">
+                and a.xuexi_content like CONCAT('%',#{params.xuexiContent},'%')
+            </if>
+            <if test="params.xuexiDeleteStart != null and params.xuexiDeleteStart != ''">
+                <![CDATA[  and a.xuexi_delete >= #{params.xuexiDeleteStart}   ]]>
+            </if>
+            <if test="params.xuexiDeleteEnd != null and params.xuexiDeleteEnd != ''">
+                <![CDATA[  and a.xuexi_delete <= #{params.xuexiDeleteEnd}   ]]>
+            </if>
+             <if test="params.xuexiDelete != null and params.xuexiDelete != ''">
+                and a.xuexi_delete = #{params.xuexiDelete}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>

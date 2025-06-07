@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.XuexiLiuyanDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.xuexi_id as xuexiId
+        ,a.yonghu_id as yonghuId
+        ,a.xuexi_liuyan_text as xuexiLiuyanText
+        ,a.insert_time as insertTime
+        ,a.reply_text as replyText
+        ,a.update_time as updateTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.XuexiLiuyanView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+        ,xuexi.xuexi_name as xuexiName
+        ,xuexi.xuexi_uuid_number as xuexiUuidNumber
+        ,xuexi.xuexi_photo as xuexiPhoto
+        ,xuexi.zan_number as zanNumber
+        ,xuexi.cai_number as caiNumber
+        ,xuexi.xuexi_file as xuexiFile
+        ,xuexi.xuexi_video as xuexiVideo
+        ,xuexi.xuexi_types as xuexiTypes
+        ,xuexi.xuexi_content as xuexiContent
+        ,xuexi.xuexi_delete as xuexiDelete
+        ,yonghu.yonghu_name as yonghuName
+        ,yonghu.yonghu_phone as yonghuPhone
+        ,yonghu.yonghu_id_number as yonghuIdNumber
+        ,yonghu.yonghu_photo as yonghuPhoto
+        ,yonghu.shenqing_yuyue_types as shenqingYuyueTypes
+        ,yonghu.yonghu_email as yonghuEmail
+
+        FROM xuexi_liuyan  a
+        left JOIN xuexi xuexi ON a.xuexi_id = xuexi.id
+        left JOIN yonghu yonghu ON a.yonghu_id = yonghu.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test="params.xuexiId != null and params.xuexiId != ''">
+                and (
+                    a.xuexi_id = #{params.xuexiId}
+                )
+            </if>
+            <if test="params.yonghuId != null and params.yonghuId != ''">
+                and (
+                    a.yonghu_id = #{params.yonghuId}
+                )
+            </if>
+            <if test=" params.xuexiLiuyanText != '' and params.xuexiLiuyanText != null and params.xuexiLiuyanText != 'null' ">
+                and a.xuexi_liuyan_text like CONCAT('%',#{params.xuexiLiuyanText},'%')
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+            <if test=" params.replyText != '' and params.replyText != null and params.replyText != 'null' ">
+                and a.reply_text like CONCAT('%',#{params.replyText},'%')
+            </if>
+            <if test=" params.updateTimeStart != '' and params.updateTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.update_time) >= UNIX_TIMESTAMP(#{params.updateTimeStart}) ]]>
+            </if>
+            <if test=" params.updateTimeEnd != '' and params.updateTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.update_time) <= UNIX_TIMESTAMP(#{params.updateTimeEnd}) ]]>
+            </if>
+            <if test="params.updateTime != null and params.updateTime != ''">
+                and a.update_time = #{params.updateTime}
+            </if>
+
+                <!-- 判断在线学习的id不为空 -->
+            <if test=" params.xuexiIdNotNull != '' and params.xuexiIdNotNull != null and params.xuexiIdNotNull != 'null' ">
+                and a.xuexi_id IS NOT NULL
+            </if>
+            <if test=" params.xuexiName != '' and params.xuexiName != null and params.xuexiName != 'null' ">
+                and xuexi.xuexi_name like CONCAT('%',#{params.xuexiName},'%')
+            </if>
+            <if test=" params.xuexiUuidNumber != '' and params.xuexiUuidNumber != null and params.xuexiUuidNumber != 'null' ">
+                and xuexi.xuexi_uuid_number like CONCAT('%',#{params.xuexiUuidNumber},'%')
+            </if>
+            <if test="params.zanNumberStart != null  and params.zanNumberStart != '' ">
+                <![CDATA[  and xuexi.zan_number >= #{params.zanNumberStart}   ]]>
+            </if>
+            <if test="params.zanNumberEnd != null  and params.zanNumberEnd != '' ">
+                <![CDATA[  and xuexi.zan_number <= #{params.zanNumberEnd}   ]]>
+            </if>
+            <if test="params.zanNumber != null  and params.zanNumber != '' ">
+                and xuexi.zan_number = #{params.zanNumber}
+            </if>
+            <if test="params.caiNumberStart != null  and params.caiNumberStart != '' ">
+                <![CDATA[  and xuexi.cai_number >= #{params.caiNumberStart}   ]]>
+            </if>
+            <if test="params.caiNumberEnd != null  and params.caiNumberEnd != '' ">
+                <![CDATA[  and xuexi.cai_number <= #{params.caiNumberEnd}   ]]>
+            </if>
+            <if test="params.caiNumber != null  and params.caiNumber != '' ">
+                and xuexi.cai_number = #{params.caiNumber}
+            </if>
+            <if test=" params.xuexiVideo != '' and params.xuexiVideo != null and params.xuexiVideo != 'null' ">
+                and xuexi.xuexi_video like CONCAT('%',#{params.xuexiVideo},'%')
+            </if>
+            <if test="params.xuexiTypes != null  and params.xuexiTypes != ''">
+                and xuexi.xuexi_types = #{params.xuexiTypes}
+            </if>
+
+            <if test=" params.xuexiContent != '' and params.xuexiContent != null and params.xuexiContent != 'null' ">
+                and xuexi.xuexi_content like CONCAT('%',#{params.xuexiContent},'%')
+            </if>
+            <if test="params.xuexiDeleteStart != null  and params.xuexiDeleteStart != '' ">
+                <![CDATA[  and xuexi.xuexi_delete >= #{params.xuexiDeleteStart}   ]]>
+            </if>
+            <if test="params.xuexiDeleteEnd != null  and params.xuexiDeleteEnd != '' ">
+                <![CDATA[  and xuexi.xuexi_delete <= #{params.xuexiDeleteEnd}   ]]>
+            </if>
+            <if test="params.xuexiDelete != null  and params.xuexiDelete != '' ">
+                and xuexi.xuexi_delete = #{params.xuexiDelete}
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(xuexi.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(xuexi.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+                <!-- 判断用户的id不为空 -->
+            <if test=" params.yonghuIdNotNull != '' and params.yonghuIdNotNull != null and params.yonghuIdNotNull != 'null' ">
+                and a.yonghu_id IS NOT NULL
+            </if>
+            <if test=" params.yonghuName != '' and params.yonghuName != null and params.yonghuName != 'null' ">
+                and yonghu.yonghu_name like CONCAT('%',#{params.yonghuName},'%')
+            </if>
+            <if test=" params.yonghuPhone != '' and params.yonghuPhone != null and params.yonghuPhone != 'null' ">
+                and yonghu.yonghu_phone like CONCAT('%',#{params.yonghuPhone},'%')
+            </if>
+            <if test=" params.yonghuIdNumber != '' and params.yonghuIdNumber != null and params.yonghuIdNumber != 'null' ">
+                and yonghu.yonghu_id_number like CONCAT('%',#{params.yonghuIdNumber},'%')
+            </if>
+            <if test="params.shenqingYuyueTypes != null  and params.shenqingYuyueTypes != ''">
+                and yonghu.shenqing_yuyue_types = #{params.shenqingYuyueTypes}
+            </if>
+
+            <if test=" params.yonghuEmail != '' and params.yonghuEmail != null and params.yonghuEmail != 'null' ">
+                and yonghu.yonghu_email like CONCAT('%',#{params.yonghuEmail},'%')
+            </if>
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>
